@@ -13,49 +13,71 @@
  **************************************************************************************/
 #include "game.h"
 
+#include <algorithm>
+
 #include "snake.h"
 #include "food.h"
 
-using namespace Game;
-
-void Config::init_game()
+void Game::Config::init_game()
 {
 	InitWindow(dimension, dimension, game_title);
 
 	// Settings
-	SetTargetFPS(60);
+	SetTargetFPS(game_fps);
 }
 
-Vector2 Utils::generate_random_pos()
+bool Game::Utils::element_in_deque(const Vector2& element, const std::deque<Vector2>& deque)
+{
+	return std::any_of(deque.begin(), deque.end(), [&](const Vector2& el)
+	{
+		return Vector2Equals(el, element);
+	});
+}
+
+Vector2 Game::Utils::generate_random_pos()
 {
 	float x = GetRandomValue(0, Config::cell_count - 1);
 	float y = GetRandomValue(0, Config::cell_count - 1);
 	return Vector2{ x, y };
 }
 
-bool RunTime::event_triggered(double interval)
+Vector2 Game::Utils::generate_random_pos(const std::deque<Vector2>& forbidden_places)
 {
-	auto current_time = GetTime();
-	if (current_time - last_update_time >= interval)
+	Vector2 position = generate_random_pos();
+
+	while (element_in_deque(position, forbidden_places))
 	{
-		last_update_time = current_time;
-		return true;
+		position = generate_random_pos();
 	}
 
-	return false;
+	return position;
 }
 
-void RunTime::update(Game::Snake& snake, Game::Food& food)
+void Game::tick(double interval, Game::Snake& snake, Game::Food& food)
 {
-	if (RunTime::event_triggered(0.2)) snake.update();
+	if (Game::event_triggered(interval))
+	{
+		snake.update();
 
+		// Collision checking
+		if (Vector2Equals(snake.body()[0], food.position()))
+		{
+			TraceLog(LOG_INFO, "Eating food!");
+
+			food.randomize_pos(snake.body());
+		}
+	}
+}
+
+void Game::update(Game::Snake& snake, Game::Food& food)
+{
 	if (IsKeyPressed(KEY_UP) && snake.direction().y != 1) snake.set_direction(0, -1);
 	if (IsKeyPressed(KEY_DOWN) && snake.direction().y != -1) snake.set_direction(0, 1);
 	if (IsKeyPressed(KEY_LEFT) && snake.direction().x != 1) snake.set_direction(-1, 0);
 	if (IsKeyPressed(KEY_RIGHT) && snake.direction().x != -1) snake.set_direction(1, 0);
 }
 
-void RunTime::draw(Game::Snake& snake, Game::Food& food)
+void Game::draw(Game::Snake& snake, Game::Food& food)
 {
 	food.draw();
 	snake.draw();
@@ -77,11 +99,13 @@ void Game::run()
 	{
 		BeginDrawing();
 
-		RunTime::update(snake, food);
+		tick(Game::Config::game_interval, snake, food);
+
+		update(snake, food);
 
 		ClearBackground(Config::game_theme.primary);
 
-		RunTime::draw(snake, food);
+		draw(snake, food);
 
 		EndDrawing();
 	}

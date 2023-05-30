@@ -13,6 +13,7 @@
  **************************************************************************************/
 #pragma once
 
+#include <deque>
 #include "raylib.h"
 
 namespace Game
@@ -27,28 +28,42 @@ namespace Game
 		Color secondary;
 	} Theme;
 
-	void run();
-}
+	namespace /* make them hidden */
+	{
+		double last_update_time = 0;
 
-namespace Game::RunTime
-{
-	static double last_update_time = 0;
+		inline bool event_triggered(double interval)
+		{
+			auto current_time = GetTime();
+			if (current_time - last_update_time >= interval)
+			{
+				last_update_time = current_time;
+				return true;
+			}
 
-	bool event_triggered(double interval);
+			return false;
+		}
+	}
+
+	void tick(double interval, Game::Snake& snake, Game::Food& food);
 
 	void update(Game::Snake& snake, Game::Food& food);
 
 	void draw(Game::Snake& snake, Game::Food& food);
+
+	void run();
 }
 
 namespace Game::Config
 {
-	namespace
+	namespace /* make them hidden */
 	{
 		const Color green = { 173, 204, 96, 255 };
 		const Color dark_green = { 43, 51, 24, 255 };
 		const Theme retro_theme = { green, dark_green };
 		constexpr const char* game_title = "Retro Game";
+		constexpr const int game_fps = 60;
+		constexpr const double game_interval = 0.2;
 	}
 
 	const static Theme game_theme = retro_theme;
@@ -63,5 +78,9 @@ namespace Game::Config
 
 namespace Game::Utils
 {
+	bool element_in_deque(const Vector2& element, const std::deque<Vector2>& deque);
+
 	Vector2 generate_random_pos();
+
+	Vector2 generate_random_pos(const std::deque<Vector2>& forbidden_places);
 }

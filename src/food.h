@@ -27,6 +27,8 @@ namespace Game
 
 		void draw() const;
 
+		void randomize_pos(const std::deque<Vector2>& snake_body);
+
 		const Vector2& position() noexcept;
 
 	private:
