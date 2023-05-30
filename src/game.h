@@ -31,6 +31,8 @@ namespace Game
 	namespace /* make them hidden */
 	{
 		double last_update_time = 0;
+		bool running = false;
+		int score = 0;
 
 		inline bool event_triggered(double interval)
 		{
@@ -50,6 +52,8 @@ namespace Game
 	void update(Game::Snake& snake, Game::Food& food);
 
 	void draw(Game::Snake& snake, Game::Food& food);
+
+	void draw_ui();
 
 	void game_over(Game::Snake& snake, Game::Food& food);
 
@@ -72,7 +76,7 @@ namespace Game::Config
 		constexpr const char* game_title = "Retro Game";
 		constexpr const int game_fps = 60;
 		constexpr const double game_interval = 0.2;
-		bool running = false;
+		constexpr const int offset = 75;
 	}
 
 	const static Theme game_theme = retro_theme;

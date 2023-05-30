@@ -29,7 +29,8 @@ Food::~Food()
 
 void Food::draw() const
 {
-	DrawTexture(m_texture, m_position.x * Config::cell_size, m_position.y * Config::cell_size, WHITE);
+	DrawTexture(m_texture, Game::Config::offset + m_position.x * Config::cell_size,
+			Game::Config::offset + m_position.y * Config::cell_size, WHITE);
 }
 
 void Food::randomize_pos(const std::deque<Vector2>& snake_body)

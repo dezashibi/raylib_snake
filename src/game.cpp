@@ -20,7 +20,7 @@
 
 void Game::Config::init_game()
 {
-	InitWindow(dimension, dimension, game_title);
+	InitWindow(2 * offset + dimension, 2 * offset + dimension, game_title);
 
 	// Settings
 	SetTargetFPS(game_fps);
@@ -65,6 +65,8 @@ void Game::tick(Game::Snake& snake, Game::Food& food)
 		food.randomize_pos(snake.body());
 
 		snake.add_segment();
+
+		++Game::score;
 	}
 
 	// Collision with edges
@@ -119,6 +121,19 @@ void Game::draw(Game::Snake& snake, Game::Food& food)
 	snake.draw();
 }
 
+void Game::draw_ui()
+{
+	// Drawing the border of the screen
+	Rectangle border{ Config::offset - 5, Config::offset - 5, Config::dimension + 10, Config::dimension + 10 };
+	DrawRectangleLinesEx(border, 5, Config::game_theme.secondary);
+
+	// Drawing UI
+	DrawText(Config::game_title, Game::Config::offset - 5, 20, 40, Config::game_theme.secondary);
+	DrawText(TextFormat("Score: %i", Game::score), Game::Config::offset - 5,
+			Game::Config::offset + Game::Config::dimension + 10, 40, Game::Config::game_theme.secondary);
+
+}
+
 void Game::game_over(Game::Snake& snake, Game::Food& food)
 {
 	TraceLog(LOG_INFO, "Game Over!");
@@ -127,22 +142,24 @@ void Game::game_over(Game::Snake& snake, Game::Food& food)
 
 	food.randomize_pos(snake.body());
 
+	Game::score = 0;
+
 	Game::pause_it();
 }
 
 bool Game::is_running()
 {
-	return Config::running;
+	return Game::running;
 }
 
 void Game::resume_it()
 {
-	Config::running = true;
+	Game::running = true;
 }
 
 void Game::pause_it()
 {
-	Config::running = false;
+	Game::running = false;
 }
 
 void Game::run()
@@ -161,6 +178,7 @@ void Game::run()
 	{
 		BeginDrawing();
 
+		// Tick the events based on the speed per FPS
 		if (Game::event_triggered(Game::Config::game_interval) && Game::is_running())
 		{
 			tick(snake, food);
@@ -171,6 +189,8 @@ void Game::run()
 		ClearBackground(Config::game_theme.primary);
 
 		draw(snake, food);
+
+		draw_ui();
 
 		EndDrawing();
 	}

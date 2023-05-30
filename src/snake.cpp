@@ -22,7 +22,8 @@ void Snake::draw()
 	{
 		auto x = m_body[i].x;
 		auto y = m_body[i].y;
-		auto segment = Rectangle{ x * Config::cell_size, y * Config::cell_size,
+		auto segment = Rectangle{ Game::Config::offset + x * Config::cell_size,
+								  Game::Config::offset + y * Config::cell_size,
 								  Config::cell_size, Config::cell_size };
 		DrawRectangleRounded(segment, 0.5, 6, Config::game_theme.secondary);
 	}
