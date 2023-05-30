@@ -15,6 +15,7 @@
 
 #include "game.h"
 
+#include "raymath.h"
 #include <deque>
 
 namespace Game
@@ -24,10 +25,13 @@ namespace Game
 	public:
 		void draw();
 
+		void update();
+
 		const std::deque<Vector2>& body() noexcept;
 
 	private:
 		std::deque<Vector2> m_body{ Vector2{ 6, 9 }, Vector2{ 5, 9 }, Vector2{ 4, 9 }};
+		Vector2 m_direction = { 1, 0 };
 	};
 
 }

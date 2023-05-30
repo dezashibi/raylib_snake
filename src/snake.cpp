@@ -28,6 +28,12 @@ void Snake::draw()
 	}
 }
 
+void Snake::update()
+{
+	m_body.pop_back();
+	m_body.push_front(Vector2Add(m_body[0], m_direction));
+}
+
 const std::deque<Vector2>& Snake::body() noexcept
 {
 	return m_body;

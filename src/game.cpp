@@ -14,6 +14,7 @@
 #include "game.h"
 
 #include "snake.h"
+#include "food.h"
 
 using namespace Game;
 
@@ -30,4 +31,34 @@ Vector2 Utils::generate_random_pos()
 	float x = GetRandomValue(0, Config::cell_count - 1);
 	float y = GetRandomValue(0, Config::cell_count - 1);
 	return Vector2{ x, y };
+}
+
+void Game::run_snake()
+{
+	auto snake = Snake();
+	auto food = Food();
+
+	/*
+	 * Game Loop
+	 * 1. Event handling
+	 * 2. Update positions
+	 * 3. Drawing objects
+	 * */
+
+	while (!WindowShouldClose())
+	{
+		BeginDrawing();
+
+		snake.update();
+
+		ClearBackground(Config::game_theme.primary);
+
+		food.draw();
+		snake.draw();
+
+		EndDrawing();
+
+	}
+
+	CloseWindow();
 }

@@ -22,6 +22,8 @@ namespace Game
 		Color primary;
 		Color secondary;
 	} Theme;
+
+	void run_snake();
 }
 
 namespace Game::Config
