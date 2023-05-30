@@ -197,7 +197,6 @@ void Game::run()
 
 	while (!WindowShouldClose())
 	{
-		BeginDrawing();
 
 		// Tick the events based on the speed per FPS
 		if (Game::event_triggered(Game::Config::game_interval) && Game::is_running())
@@ -207,10 +206,10 @@ void Game::run()
 
 		update(snake, food);
 
+		BeginDrawing();
+
 		ClearBackground(Config::game_theme.primary);
-
 		draw(snake, food);
-
 		draw_ui();
 
 		EndDrawing();
