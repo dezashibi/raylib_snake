@@ -7,5 +7,6 @@ int main()
 	Game::run();
 
 	Game::Config::unload_resources();
+
 	return 0;
 }
