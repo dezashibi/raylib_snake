@@ -53,34 +53,88 @@ Vector2 Game::Utils::generate_random_pos(const std::deque<Vector2>& forbidden_pl
 	return position;
 }
 
-void Game::tick(double interval, Game::Snake& snake, Game::Food& food)
+void Game::tick(Game::Snake& snake, Game::Food& food)
 {
-	if (Game::event_triggered(interval))
+	snake.update();
+
+	// Collision checking
+	if (Vector2Equals(snake.body().at(0), food.position()))
 	{
-		snake.update();
+		TraceLog(LOG_INFO, "Eating food!");
 
-		// Collision checking
-		if (Vector2Equals(snake.body()[0], food.position()))
-		{
-			TraceLog(LOG_INFO, "Eating food!");
+		food.randomize_pos(snake.body());
 
-			food.randomize_pos(snake.body());
-		}
+		snake.add_segment();
 	}
+
+	// Collision with edges
+	if (snake.body().at(0).x == Config::cell_count || snake.body().at(0).x == -1) Game::game_over(snake, food);
+	if (snake.body().at(0).y == Config::cell_count || snake.body().at(0).y == -1) Game::game_over(snake, food);
 }
 
 void Game::update(Game::Snake& snake, Game::Food& food)
 {
-	if (IsKeyPressed(KEY_UP) && snake.direction().y != 1) snake.set_direction(0, -1);
-	if (IsKeyPressed(KEY_DOWN) && snake.direction().y != -1) snake.set_direction(0, 1);
-	if (IsKeyPressed(KEY_LEFT) && snake.direction().x != 1) snake.set_direction(-1, 0);
-	if (IsKeyPressed(KEY_RIGHT) && snake.direction().x != -1) snake.set_direction(1, 0);
+	if (IsKeyPressed(KEY_UP) && snake.direction().y != 1)
+	{
+		snake.set_direction(0, -1);
+		Game::resume_it();
+	}
+
+	if (IsKeyPressed(KEY_DOWN) && snake.direction().y != -1)
+	{
+		snake.set_direction(0, 1);
+		Game::resume_it();
+	}
+
+	if (IsKeyPressed(KEY_LEFT) && snake.direction().x != 1)
+	{
+		snake.set_direction(-1, 0);
+		Game::resume_it();
+	}
+
+	if (IsKeyPressed(KEY_RIGHT) && snake.direction().x != -1)
+	{
+		snake.set_direction(1, 0);
+		Game::resume_it();
+	}
+
+	if (IsKeyPressed(KEY_P))
+	{
+		if (Game::is_running()) Game::pause_it();
+		else Game::resume_it();
+	}
 }
 
 void Game::draw(Game::Snake& snake, Game::Food& food)
 {
 	food.draw();
 	snake.draw();
+}
+
+void Game::game_over(Game::Snake& snake, Game::Food& food)
+{
+	TraceLog(LOG_INFO, "Game Over!");
+
+	snake.reset();
+
+	food.randomize_pos(snake.body());
+
+	Game::pause_it();
+}
+
+bool Game::is_running()
+{
+	return Config::running;
+}
+
+void Game::resume_it()
+{
+	Config::running = true;
+}
+
+void Game::pause_it()
+{
+	Config::running = false;
 }
 
 void Game::run()
@@ -99,7 +153,10 @@ void Game::run()
 	{
 		BeginDrawing();
 
-		tick(Game::Config::game_interval, snake, food);
+		if (Game::event_triggered(Game::Config::game_interval) && Game::is_running())
+		{
+			tick(snake, food);
+		}
 
 		update(snake, food);
 

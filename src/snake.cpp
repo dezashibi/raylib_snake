@@ -30,8 +30,16 @@ void Snake::draw()
 
 void Snake::update()
 {
-	m_body.pop_back();
 	m_body.push_front(Vector2Add(m_body[0], m_direction));
+
+	if (m_add_segment)
+	{
+		m_add_segment = false;
+		return;
+	}
+
+	m_body.pop_back();
+
 }
 
 const std::deque<Vector2>& Snake::body() noexcept
@@ -54,4 +62,16 @@ void Snake::set_direction(Vector2 dir)
 const Vector2& Snake::direction() noexcept
 {
 	return m_direction;
+}
+
+void Snake::add_segment()
+{
+	m_add_segment = true;
+}
+
+void Snake::reset()
+{
+	m_body = { Vector2{ 6, 9 }, Vector2{ 5, 9 }, Vector2{ 4, 9 }};
+	m_direction = { 1, 0 };
+	m_add_segment = false;
 }

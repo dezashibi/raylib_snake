@@ -35,9 +35,14 @@ namespace Game
 
 		const Vector2& direction() noexcept;
 
+		void add_segment();
+
+		void reset();
+
 	private:
 		std::deque<Vector2> m_body{ Vector2{ 6, 9 }, Vector2{ 5, 9 }, Vector2{ 4, 9 }};
-		Vector2 m_direction = { 1, 0 };
+		Vector2 m_direction{ 1, 0 };
+		bool m_add_segment{ false };
 	};
 
 }

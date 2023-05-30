@@ -45,11 +45,19 @@ namespace Game
 		}
 	}
 
-	void tick(double interval, Game::Snake& snake, Game::Food& food);
+	void tick(Game::Snake& snake, Game::Food& food);
 
 	void update(Game::Snake& snake, Game::Food& food);
 
 	void draw(Game::Snake& snake, Game::Food& food);
+
+	void game_over(Game::Snake& snake, Game::Food& food);
+
+	bool is_running();
+
+	void resume_it();
+
+	void pause_it();
 
 	void run();
 }
@@ -64,6 +72,7 @@ namespace Game::Config
 		constexpr const char* game_title = "Retro Game";
 		constexpr const int game_fps = 60;
 		constexpr const double game_interval = 0.2;
+		bool running = false;
 	}
 
 	const static Theme game_theme = retro_theme;
