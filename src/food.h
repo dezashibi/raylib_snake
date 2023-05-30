@@ -13,10 +13,10 @@
  **************************************************************************************/
 #pragma once
 
-#include "snake.h"
+#include "game.h"
 
 
-namespace Snake
+namespace Game
 {
 	class Food
 	{

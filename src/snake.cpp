@@ -14,19 +14,21 @@
 
 #include "snake.h"
 
-using namespace Snake;
+using namespace Game;
 
-void Config::init_game()
+void Snake::draw()
 {
-	InitWindow(dimension, dimension, game_title);
-
-	// Settings
-	SetTargetFPS(60);
+	for (unsigned i{ 0 }; i < m_body.size(); ++i)
+	{
+		auto x = m_body[i].x;
+		auto y = m_body[i].y;
+		auto segment = Rectangle{ x * Config::cell_size, y * Config::cell_size,
+								  Config::cell_size, Config::cell_size };
+		DrawRectangleRounded(segment, 0.5, 6, Config::game_theme.secondary);
+	}
 }
 
-Vector2 Utils::generate_random_pos()
+const std::deque<Vector2>& Snake::body() noexcept
 {
-	float x = GetRandomValue(0, Config::cell_count - 1);
-	float y = GetRandomValue(0, Config::cell_count - 1);
-	return Vector2{ x, y };
+	return m_body;
 }

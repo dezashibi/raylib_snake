@@ -13,40 +13,21 @@
  **************************************************************************************/
 #pragma once
 
-#include "raylib.h"
+#include "game.h"
 
-namespace Snake
+#include <deque>
+
+namespace Game
 {
-	typedef struct
+	class Snake
 	{
-		Color primary;
-		Color secondary;
-	} Theme;
-}
+	public:
+		void draw();
 
-namespace Snake::Config
-{
-	namespace
-	{
-		const Color green = { 173, 204, 96, 255 };
-		const Color dark_green = { 43, 51, 24, 255 };
-		const Theme retro_theme = { green, dark_green };
-		constexpr const char* game_title = "Retro Snake";
-	}
+		const std::deque<Vector2>& body() noexcept;
 
-	const static Theme game_theme = retro_theme;
-
-	constexpr static int cell_size = 30;
-	constexpr static int cell_count = 25;
-
-	constexpr static int dimension = cell_size * cell_count;
-
-	void init_game();
-}
-
-namespace Snake::Utils
-{
-
-	Vector2 generate_random_pos();
+	private:
+		std::deque<Vector2> m_body{ Vector2{ 6, 9 }, Vector2{ 5, 9 }, Vector2{ 4, 9 }};
+	};
 
 }

@@ -1,5 +1,5 @@
 /***************************************************************************************
-    File: food.cpp
+    File: game.h
     Author: Navid Dezashibi
     Initial Creation Date: 2023-05-30
     Contact: navid@dezashibi.com
@@ -11,28 +11,42 @@
  ***************************************************************************************   
     << OTHER DESCRIPTIONS >>
  **************************************************************************************/
-#include "food.h"
+#pragma once
 
-using namespace Game;
+#include "raylib.h"
 
-Food::Food() : m_position(Utils::generate_random_pos())
+namespace Game
 {
-	Image image = LoadImage("assets/images/food.png");
-	m_texture = LoadTextureFromImage(image);
-	UnloadImage(image);
+	typedef struct
+	{
+		Color primary;
+		Color secondary;
+	} Theme;
 }
 
-Food::~Food()
+namespace Game::Config
 {
-	UnloadTexture(m_texture);
+	namespace
+	{
+		const Color green = { 173, 204, 96, 255 };
+		const Color dark_green = { 43, 51, 24, 255 };
+		const Theme retro_theme = { green, dark_green };
+		constexpr const char* game_title = "Retro Game";
+	}
+
+	const static Theme game_theme = retro_theme;
+
+	constexpr static int cell_size = 30;
+	constexpr static int cell_count = 25;
+
+	constexpr static int dimension = cell_size * cell_count;
+
+	void init_game();
 }
 
-void Food::draw() const
+namespace Game::Utils
 {
-	DrawTexture(m_texture, m_position.x * Config::cell_size, m_position.y * Config::cell_size, WHITE);
-}
 
-const Vector2& Food::position() noexcept
-{
-	return m_position;
+	Vector2 generate_random_pos();
+
 }

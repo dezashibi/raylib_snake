@@ -1,5 +1,5 @@
 /***************************************************************************************
-    File: food.cpp
+    File: game.cpp
     Author: Navid Dezashibi
     Initial Creation Date: 2023-05-30
     Contact: navid@dezashibi.com
@@ -11,28 +11,23 @@
  ***************************************************************************************   
     << OTHER DESCRIPTIONS >>
  **************************************************************************************/
-#include "food.h"
+#include "game.h"
+
+#include "snake.h"
 
 using namespace Game;
 
-Food::Food() : m_position(Utils::generate_random_pos())
+void Config::init_game()
 {
-	Image image = LoadImage("assets/images/food.png");
-	m_texture = LoadTextureFromImage(image);
-	UnloadImage(image);
+	InitWindow(dimension, dimension, game_title);
+
+	// Settings
+	SetTargetFPS(60);
 }
 
-Food::~Food()
+Vector2 Utils::generate_random_pos()
 {
-	UnloadTexture(m_texture);
-}
-
-void Food::draw() const
-{
-	DrawTexture(m_texture, m_position.x * Config::cell_size, m_position.y * Config::cell_size, WHITE);
-}
-
-const Vector2& Food::position() noexcept
-{
-	return m_position;
+	float x = GetRandomValue(0, Config::cell_count - 1);
+	float y = GetRandomValue(0, Config::cell_count - 1);
+	return Vector2{ x, y };
 }

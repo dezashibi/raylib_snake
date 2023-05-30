@@ -1,12 +1,14 @@
+#include "game.h"
 #include "snake.h"
 #include "food.h"
 
-using namespace Snake;
+using namespace Game;
 
 int main()
 {
 	Config::init_game();
 
+	auto snake = Snake();
 	auto food = Food();
 
 	/*
@@ -23,6 +25,7 @@ int main()
 		ClearBackground(Config::game_theme.primary);
 
 		food.draw();
+		snake.draw();
 
 		EndDrawing();
 
