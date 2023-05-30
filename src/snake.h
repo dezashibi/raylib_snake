@@ -29,6 +29,12 @@ namespace Game
 
 		const std::deque<Vector2>& body() noexcept;
 
+		void set_direction(float x, float y);
+
+		void set_direction(Vector2 dir);
+
+		const Vector2& direction() noexcept;
+
 	private:
 		std::deque<Vector2> m_body{ Vector2{ 6, 9 }, Vector2{ 5, 9 }, Vector2{ 4, 9 }};
 		Vector2 m_direction = { 1, 0 };

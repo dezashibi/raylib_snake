@@ -1,11 +1,9 @@
 #include "game.h"
 
-using namespace Game;
-
 int main()
 {
-	Config::init_game();
+	Game::Config::init_game();
 
-	run_snake();
+	Game::run();
 	return 0;
 }

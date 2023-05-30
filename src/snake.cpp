@@ -38,3 +38,20 @@ const std::deque<Vector2>& Snake::body() noexcept
 {
 	return m_body;
 }
+
+void Snake::set_direction(float x, float y)
+{
+	m_direction.x = x;
+	m_direction.y = y;
+}
+
+void Snake::set_direction(Vector2 dir)
+{
+	m_direction.x = dir.x;
+	m_direction.y = dir.y;
+}
+
+const Vector2& Snake::direction() noexcept
+{
+	return m_direction;
+}

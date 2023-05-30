@@ -17,13 +17,28 @@
 
 namespace Game
 {
+	class Snake;
+
+	class Food;
+
 	typedef struct
 	{
 		Color primary;
 		Color secondary;
 	} Theme;
 
-	void run_snake();
+	void run();
+}
+
+namespace Game::RunTime
+{
+	static double last_update_time = 0;
+
+	bool event_triggered(double interval);
+
+	void update(Game::Snake& snake, Game::Food& food);
+
+	void draw(Game::Snake& snake, Game::Food& food);
 }
 
 namespace Game::Config
@@ -48,7 +63,5 @@ namespace Game::Config
 
 namespace Game::Utils
 {
-
 	Vector2 generate_random_pos();
-
 }

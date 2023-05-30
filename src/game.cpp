@@ -33,7 +33,35 @@ Vector2 Utils::generate_random_pos()
 	return Vector2{ x, y };
 }
 
-void Game::run_snake()
+bool RunTime::event_triggered(double interval)
+{
+	auto current_time = GetTime();
+	if (current_time - last_update_time >= interval)
+	{
+		last_update_time = current_time;
+		return true;
+	}
+
+	return false;
+}
+
+void RunTime::update(Game::Snake& snake, Game::Food& food)
+{
+	if (RunTime::event_triggered(0.2)) snake.update();
+
+	if (IsKeyPressed(KEY_UP) && snake.direction().y != 1) snake.set_direction(0, -1);
+	if (IsKeyPressed(KEY_DOWN) && snake.direction().y != -1) snake.set_direction(0, 1);
+	if (IsKeyPressed(KEY_LEFT) && snake.direction().x != 1) snake.set_direction(-1, 0);
+	if (IsKeyPressed(KEY_RIGHT) && snake.direction().x != -1) snake.set_direction(1, 0);
+}
+
+void RunTime::draw(Game::Snake& snake, Game::Food& food)
+{
+	food.draw();
+	snake.draw();
+}
+
+void Game::run()
 {
 	auto snake = Snake();
 	auto food = Food();
@@ -49,15 +77,13 @@ void Game::run_snake()
 	{
 		BeginDrawing();
 
-		snake.update();
+		RunTime::update(snake, food);
 
 		ClearBackground(Config::game_theme.primary);
 
-		food.draw();
-		snake.draw();
+		RunTime::draw(snake, food);
 
 		EndDrawing();
-
 	}
 
 	CloseWindow();
