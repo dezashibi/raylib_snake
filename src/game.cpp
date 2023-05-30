@@ -70,6 +70,14 @@ void Game::tick(Game::Snake& snake, Game::Food& food)
 	// Collision with edges
 	if (snake.body().at(0).x == Config::cell_count || snake.body().at(0).x == -1) Game::game_over(snake, food);
 	if (snake.body().at(0).y == Config::cell_count || snake.body().at(0).y == -1) Game::game_over(snake, food);
+
+	// Collision with itself
+	std::deque<Vector2> headless_body = snake.body();
+	headless_body.pop_front();
+	if (Game::Utils::element_in_deque(snake.body().at(0), headless_body))
+	{
+		game_over(snake, food);
+	}
 }
 
 void Game::update(Game::Snake& snake, Game::Food& food)
