@@ -41,11 +41,12 @@ namespace Snake::Config
 
 	constexpr static int dimension = cell_size * cell_count;
 
-	static void init_game()
-	{
-		InitWindow(dimension, dimension, game_title);
+	void init_game();
+}
 
-		// Settings
-		SetTargetFPS(60);
-	}
+namespace Snake::Utils
+{
+
+	Vector2 generate_random_pos();
+
 }

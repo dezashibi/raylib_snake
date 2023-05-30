@@ -13,7 +13,7 @@
  **************************************************************************************/
 #pragma once
 
-#include "../snake.h"
+#include "snake.h"
 
 
 namespace Snake
@@ -30,7 +30,7 @@ namespace Snake
 		const Vector2& position() noexcept;
 
 	private:
-		Vector2 m_position = { 5, 6 };
-		Texture2D m_texture;
+		Vector2 m_position;
+		Texture2D m_texture{};
 	};
 }

@@ -1,4 +1,3 @@
-#include <iostream>
 #include "snake.h"
 #include "food.h"
 
