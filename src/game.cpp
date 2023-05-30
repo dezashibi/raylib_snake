@@ -40,6 +40,7 @@ void Game::Config::unload_resources()
 	UnloadSound(Config::score_sound);
 	UnloadSound(Config::death_sound);
 	CloseAudioDevice();
+	CloseWindow();
 }
 
 bool Game::Utils::element_in_deque(const Vector2& element, const std::deque<Vector2>& deque)
@@ -214,6 +215,4 @@ void Game::run()
 
 		EndDrawing();
 	}
-
-	CloseWindow();
 }
