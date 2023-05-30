@@ -73,15 +73,17 @@ namespace Game::Config
 		const Color green = { 173, 204, 96, 255 };
 		const Color dark_green = { 43, 51, 24, 255 };
 		const Theme retro_theme = { green, dark_green };
+
 		constexpr int cell_size = 30;
 		constexpr int cell_count = 25;
-
 		constexpr int dimension = cell_size * cell_count;
+
+		constexpr const int offset = 75;
 
 		constexpr const char* game_title = "Retro Game";
 		constexpr const int game_fps = 60;
 		constexpr const double game_interval = 0.2;
-		constexpr const int offset = 75;
+		
 		Sound score_sound{};
 		Sound death_sound{};
 	}
