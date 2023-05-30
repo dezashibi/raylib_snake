@@ -18,12 +18,28 @@
 #include "snake.h"
 #include "food.h"
 
+void Game::Config::init_audio()
+{
+	InitAudioDevice();
+	Config::score_sound = LoadSound("assets/sounds/score.mp3");
+	Config::death_sound = LoadSound("assets/sounds/death.mp3");
+}
+
 void Game::Config::init_game()
 {
 	InitWindow(2 * offset + dimension, 2 * offset + dimension, game_title);
 
 	// Settings
 	SetTargetFPS(game_fps);
+
+	Game::Config::init_audio();
+}
+
+void Game::Config::unload_resources()
+{
+	UnloadSound(Config::score_sound);
+	UnloadSound(Config::death_sound);
+	CloseAudioDevice();
 }
 
 bool Game::Utils::element_in_deque(const Vector2& element, const std::deque<Vector2>& deque)
@@ -61,6 +77,8 @@ void Game::tick(Game::Snake& snake, Game::Food& food)
 	if (Vector2Equals(snake.body().at(0), food.position()))
 	{
 		TraceLog(LOG_INFO, "Eating food!");
+
+		Sound::play_score_sound();
 
 		food.randomize_pos(snake.body());
 
@@ -137,6 +155,8 @@ void Game::draw_ui()
 void Game::game_over(Game::Snake& snake, Game::Food& food)
 {
 	TraceLog(LOG_INFO, "Game Over!");
+
+	Sound::play_death_sound();
 
 	snake.reset();
 

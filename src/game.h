@@ -77,6 +77,8 @@ namespace Game::Config
 		constexpr const int game_fps = 60;
 		constexpr const double game_interval = 0.2;
 		constexpr const int offset = 75;
+		Sound score_sound{};
+		Sound death_sound{};
 	}
 
 	const static Theme game_theme = retro_theme;
@@ -86,7 +88,11 @@ namespace Game::Config
 
 	constexpr static int dimension = cell_size * cell_count;
 
+	void init_audio();
+
 	void init_game();
+
+	void unload_resources();
 }
 
 namespace Game::Utils
@@ -96,4 +102,17 @@ namespace Game::Utils
 	Vector2 generate_random_pos();
 
 	Vector2 generate_random_pos(const std::deque<Vector2>& forbidden_places);
+}
+
+namespace Game::Sound
+{
+	inline void play_score_sound()
+	{
+		PlaySound(Config::score_sound);
+	}
+
+	inline void play_death_sound()
+	{
+		PlaySound(Config::death_sound);
+	}
 }
